@@ -1,8 +1,8 @@
 ;; CHAPTER TWO
 
 
-;; This *atom?* function is a bit different from what Petite Chez Scheme implements.
-;; Therefore, it needs to be included here so that other programs calling the function can run correctly.
+;; This atom? function is a bit different from what Petite Chez Scheme (which is what I currently use) implements.
+;; Therefore, it is included here so that other programs calling the function can run correctly.
 (define atom?
 	(lambda (x)
 		(and (not (pair? x)) (not (null? x)))
@@ -22,9 +22,9 @@
 	)
 )
 
-;; A lat is a list of atoms.
+;; A lat means a list of atoms.
 ;; If the list comprises ALL atoms, the function will return #t. Otherwise, #f.
-;; Special case; (lat? '()) ---> #t, since it does not contain a list.
+;; Special case: (lat? '()) ---> #t, since it does not contain a list.
 (define lat?
 	(lambda (L)
 		(cond
@@ -36,6 +36,7 @@
 )
 
 ;; Implement built-in function.
+;; The function checks if L contains x.
 ;; x has to be an atom here; L is a lat.
 (define member?
 	(lambda (x L)
