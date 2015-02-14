@@ -15,6 +15,7 @@
 	)
 )
 
+;; Addition.
 ;; o+ is to number as cons is to list.
 ;; Warning: a has to be bigger than or equal to 0.
 ;; e.g: a + b
@@ -34,6 +35,7 @@
 	)
 )
 
+;; Subtraction.
 ;; Warning: b has to be bigger than or equal to 0.
 (define o-
 	(lambda (a b)
@@ -47,6 +49,7 @@
 )
 
 ;; The function builds a number by totaling all the numbers in a tup.
+;; tup is short for tuple, which is a list of numbers.
 (define addup
 	(lambda (tup)
 		(cond
@@ -56,6 +59,7 @@
 	)
 )
 
+;; Multiplication.
 ;; Warning: n has to be bigger than or equal to 0.
 (define x
 	(lambda (n m)
@@ -66,6 +70,7 @@
 	)
 )
 
+;; The function traverses two tups at the same time and add two numbers with the same index to return a new tup.
 ;; tup1 and tup2 can be different length.
 (define tup+
 	(lambda (tup1 tup2)
@@ -139,6 +144,7 @@
 	)
 )
 
+;; Calculate n^m.
 ;; m has to be bigger than or equal to 0.
 (define expt
 	(lambda (n m)
@@ -149,6 +155,7 @@
 	)
 )
 
+;; Division.
 ;; m has to be bigger than or equal to 0.
 (define div
 	(lambda (n m)
@@ -191,7 +198,7 @@
 	)
 )
 
-;; Remove numbers from a lat.
+;; Remove all numbers from a lat.
 (define no-nums
 	(lambda (lat)
 		(cond
