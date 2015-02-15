@@ -19,6 +19,7 @@
 )
 
 ; Enhanced version of the function rember in Chapter_3.scm.
+; a is an atom; L is a list of S-expressions.
 (define rember*
 	(lambda (a L)
 		(cond
@@ -172,6 +173,63 @@
 					(else (and (eqlist? (car L1) (car L2)) (eqlist? (cdr L1) (cdr L2))))
 				)
 			)
+		)
+	)
+)
+
+; The function uses eqan? and eqlist? to check if S1 and S2 are the same S-expression.
+; eqan? (atoms) ---> eqlist? (lists) ---> equal? (S-expressions)
+(define equal?
+	(lambda (S1 S2)
+		(cond
+			((atom? S1)
+				(cond
+					((atom? S2) (eqan? S1 S2))
+					(else #f)
+				)
+			)
+			(else
+				(cond
+					((atom? S2) #f)
+					(else (eqlist? S1 S2))
+				)
+			)
+		)
+	)
+)
+
+; A more concise version of function equal?.
+(define equal?
+	(lambda (S1 S2)
+		(cond
+			((and (atom? S1) (atom? S2)) (eqan? S1 S2)) ; Both S1 and S2 are atoms.
+			((or (atom? S1) (atom? S2)) #f) ; One of S1 and S2 is an atom.
+			(else (eqlist? S1 S2)) ; Both S1 and S2 are lists.
+		)
+	)
+)
+
+; Simplified version of function eqlist? using equal?.
+(define eqlist?
+	(lambda (L1 L2)
+		(cond
+ 			((and (null? L1) (null? L2)) #t)
+			((or (null? L1) (null? L2)) #f)
+			; If both L1 and L2 are not empty lists.
+			((and (equal? (car L1) (car L2)) (eqlist? (cdr L1) (cdr L2))))
+		)
+	)
+)
+
+; Go through a list and remove the first occurence of s.
+; Simplified version of the function rember in Chapter_3.scm.
+; s is an S-expression; L is a list of S-expressions.
+(define rember
+	(lambda (s L)
+		(cond
+			((null? L) '())
+			((equal? s (car L)) (cdr L))
+			(else (cons (car L) (rember s (cdr L))))
 		)
 	)
 )

@@ -2,14 +2,13 @@
 ; Author: Yongzhen Ren
 
 
-; Go through a list and remove the first occurence of atom x.
-; x has to be an atom here; L is a lat.
+; Go through a lat and remove the first occurence of atom x.
 (define rember
-	(lambda (x L)
+	(lambda (x lat)
 		(cond
-			((null? L) '())
-			((eq? x (car L)) (cdr L))
-			(#t (cons (car L) (rember x (cdr L))))
+			((null? lat) '())
+			((eq? x (car lat)) (cdr lat))
+			(#t (cons (car lat) (rember x (cdr lat))))
 		)
 	)
 )
