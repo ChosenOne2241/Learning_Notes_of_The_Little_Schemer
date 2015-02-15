@@ -38,7 +38,7 @@
 	)
 )
 
-; Both arguments new and old need to be atoms.
+; Both arguments new and old have to be atoms.
 ; The function builds a lat with new inserted to the right of the first ocurrence of old.
 (define insertR
 	(lambda (new old lat)

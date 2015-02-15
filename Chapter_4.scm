@@ -4,7 +4,7 @@
 
 ; In this chapter, we assume that all inputs should be integers.
 
-; add1 and sub1 are built-in functions in Petite.
+; add1 and sub1 are also built-in functions in Petite.
 (define add1
 	(lambda (n)
 		(+ n 1)

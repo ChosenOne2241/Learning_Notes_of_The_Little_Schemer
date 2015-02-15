@@ -2,7 +2,9 @@
 ; Author: Yongzhen Ren
 
 
-; This atom? function is a bit different from what Petite Chez Scheme (which is what I currently use) implements.
+; This atom? function is a little different from what Petite Chez Scheme (which is what I currently use) implements.
+; Here is the information about how atom? act in Petite:
+; http://www.scheme.com/csug8/objects.html
 ; Therefore, it is included here so that other programs calling the function can run correctly.
 (define atom?
 	(lambda (x)
