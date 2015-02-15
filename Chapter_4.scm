@@ -1,8 +1,10 @@
-;; CHAPTER FOUR
-;; Author: Yongzhen Ren
-;; In this chapter, we assume that all inputs should be integers.
+; CHAPTER FOUR
+; Author: Yongzhen Ren
 
-;; add1 and sub1 are built-in functions in Petite.
+
+; In this chapter, we assume that all inputs should be integers.
+
+; add1 and sub1 are built-in functions in Petite.
 (define add1
 	(lambda (n)
 		(+ n 1)
@@ -15,41 +17,41 @@
 	)
 )
 
-;; Addition.
-;; o+ is to number as cons is to list.
-;; Warning: a has to be bigger than or equal to 0.
-;; e.g: a + b
-;;      4 + 14
-;;      3 + 15
-;;      2 + 16
-;;      1 + 17
-;;      0 + 18 ---> return b as the final result
+; Addition.
+; o+ is to number as cons is to list.
+; Warning: a has to be bigger than or equal to 0.
+; e.g: a + b
+;      4 + 14
+;      3 + 15
+;      2 + 16
+;      1 + 17
+;      0 + 18 ---> return b as the final result
 (define o+
 	(lambda (a b)
 		(cond
 			((zero? a) b)
 			(else (o+ (sub1 a) (add1 b)))
-			;; (else (sub1 (o+ a (add1 b))))
-			;; The above statement has the same effect.
+			; (else (sub1 (o+ a (add1 b))))
+			; The above statement has the same effect.
 		)
 	)
 )
 
-;; Subtraction.
-;; Warning: b has to be bigger than or equal to 0.
+; Subtraction.
+; Warning: b has to be bigger than or equal to 0.
 (define o-
 	(lambda (a b)
 		(cond
 			((zero? b) a)
 			(else (o- (sub1 a) (sub1 b)))
-			;; (else (sub1 (o- a (sub1 b))))
-			;; The above statement has the same effect.
+			; (else (sub1 (o- a (sub1 b))))
+			; The above statement has the same effect.
 		)
 	)
 )
 
-;; The function builds a number by totaling all the numbers in a tup.
-;; tup is short for tuple, which is a list of numbers.
+; The function builds a number by totaling all the numbers in a tup.
+; tup is short for tuple, which is a list of numbers.
 (define addup
 	(lambda (tup)
 		(cond
@@ -59,8 +61,8 @@
 	)
 )
 
-;; Multiplication.
-;; Warning: n has to be bigger than or equal to 0.
+; Multiplication.
+; Warning: n has to be bigger than or equal to 0.
 (define x
 	(lambda (n m)
 		(cond
@@ -70,8 +72,8 @@
 	)
 )
 
-;; The function traverses two tups at the same time and add two numbers with the same index to return a new tup.
-;; tup1 and tup2 can be different length.
+; The function traverses two tups at the same time and add two numbers with the same index to return a new tup.
+; tup1 and tup2 can be different length.
 (define tup+
 	(lambda (tup1 tup2)
 		(cond
@@ -82,58 +84,58 @@
 	)
 )
 
-;; Both n and m have to be bigger than or equal to 0.
+; Both n and m have to be bigger than or equal to 0.
 (define >
 	(lambda (n m)
 		(cond
 			((zero? n) #f)
 			((zero? m) #t)
-			;; The order of the two terminal conditions matters.
+			; The order of the two terminal conditions matters.
 			(#t (> (sub1 n) (sub1 m)))
 		)
 	)
 )
 
-;; n and m have to be bigger than or equal to 0.
+; n and m have to be bigger than or equal to 0.
 (define <
 	(lambda (n m)
 		(cond
 			((zero? m) #f)
 			((zero? n) #t)
-			;; The order of the two terminal conditions matters.
+			; The order of the two terminal conditions matters.
 			(#t (< (sub1 n) (sub1 m)))
 		)
 	)
 )
 
-;; Both n and m have to be bigger than or equal to 0.
-;; The code is based on such an idea:
-;; 1. if (n == 0) and (m == 0) ---> #t
-;; 2. if (n != 0) and (m != 0) ---> Recursion.
-;; 3. if (n == 0) and (m != 0) ---> #f
-;; 4. if (n != 0) and (m == 0) ---> #f
+; Both n and m have to be bigger than or equal to 0.
+; The code is based on such an idea:
+; 1. if (n == 0) and (m == 0) ---> #t
+; 2. if (n != 0) and (m != 0) ---> Recursion.
+; 3. if (n == 0) and (m != 0) ---> #f
+; 4. if (n != 0) and (m == 0) ---> #f
 (define =
 	(lambda (n m)
 		(cond
-			((and (zero? n) (zero? m)) #t) ;; 1
-			((not (or (zero? n) (zero? m))) (= (sub1 n) (sub1 m))) ;; 2
-			(else #f) ;; 3 & 4
+			((and (zero? n) (zero? m)) #t) ; 1
+			((not (or (zero? n) (zero? m))) (= (sub1 n) (sub1 m))) ; 2
+			(else #f) ; 3 & 4
 		)
 	)
 )
 
-;; Different implementation of = function.
+; Different implementation of = function.
 (define =
 	(lambda (n m)
 		(cond
-			((zero? n) (zero? m)) ;; 1 & 3
-			((zero? m) #f) ;; 4
+			((zero? n) (zero? m)) ; 1 & 3
+			((zero? m) #f) ; 4
 			(else (= (sub1 n) (sub1 m)))
 		)
 	)
 )
 
-;; Another implementation of = function using > and <. (Non-recursion)
+; Another implementation of = function using > and <. (Non-recursion)
 (define =
 	(lambda (n m)
 		(cond
@@ -144,8 +146,8 @@
 	)
 )
 
-;; Calculate n^m.
-;; m has to be bigger than or equal to 0.
+; Calculate n^m.
+; m has to be bigger than or equal to 0.
 (define expt
 	(lambda (n m)
 		(cond
@@ -155,8 +157,8 @@
 	)
 )
 
-;; Division.
-;; m has to be bigger than or equal to 0.
+; Division.
+; m has to be bigger than or equal to 0.
 (define div
 	(lambda (n m)
 		(cond
@@ -166,7 +168,7 @@
 	)
 )
 
-;; Return the number of S-expressions in a lat.
+; Return the number of S-expressions in a lat.
 (define length
 	(lambda (lat)
 		(cond
@@ -176,8 +178,8 @@
 	)
 )
 
-;; Pick the nth S-expression from a lat.
-;; n should be bigger than 0; lat cannot be an empty list and the length of lat has to be bigger than 0.
+; Pick the nth S-expression from a lat.
+; n should be bigger than 0; lat cannot be an empty list and the length of lat has to be bigger than 0.
 (define pick
 	(lambda (n lat)
 		(cond
@@ -187,8 +189,8 @@
 	)
 )
 
-;; Remove the nth S-expression in a lat.
-;; n should be bigger than 0; lat cannot be an empty list and the length of lat has to be bigger than 0.
+; Remove the nth S-expression in a lat.
+; n should be bigger than 0; lat cannot be an empty list and the length of lat has to be bigger than 0.
 (define rempick
 	(lambda (n lat)
 		(cond
@@ -198,7 +200,7 @@
 	)
 )
 
-;; Remove all numbers from a lat.
+; Remove all numbers from a lat.
 (define no-nums
 	(lambda (lat)
 		(cond
@@ -209,7 +211,7 @@
 	)
 )
 
-;; The function extracts a tup from a lat using all the numbers in the lat.
+; The function extracts a tup from a lat using all the numbers in the lat.
 (define all-nums
 	(lambda (lat)
 		(cond
@@ -220,21 +222,21 @@
 	)
 )
 
-;; The function returns #t if its two arguments are the same atom.
-;; Warning: all two arguments have to be atoms.
+; The function returns #t if its two arguments are the same atom.
+; All two arguments have to be atoms.
 (define eqan?
 	(lambda (a1 a2)
 		(cond
 			((and (number? a1) (number? a2)) (= a1 a2))
 			((not (or (number? a1) (number? a2))) (eq? a1 a2))
-			;; Both of them are not numbers.
+			; Both of them are not numbers.
 			(else #f)
 		)
 	)
 )
 
-;; The function counts the number of times an atom a appears in a lat.
-;; Warning: a has to be an atom.
+; The function counts the number of times an atom a appears in a lat.
+; Warning: a has to be an atom.
 (define occur
 	(lambda (a lat)
 		(cond
@@ -245,8 +247,8 @@
 	)
 )
 
-;; The function returns #t if n is 1 and #f otherwise.
-;; n should be a number.
+; The function returns #t if n is 1 and #f otherwise.
+; n should be a number.
 (define one?
 	(lambda (n)
 		(cond
@@ -256,14 +258,14 @@
 	)
 )
 
-;; A more concise version of function one?.
+; A more concise version of function one?.
 (define one?
 	(lambda (n)
 		(= n 1)
 	)
 )
 
-;; Rewritten version of function rempick using function one?.
+; Rewritten version of function rempick using function one?.
 (define rempick
 	(lambda (n lat)
 		(cond
