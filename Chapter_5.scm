@@ -1,5 +1,6 @@
 ; CHAPTER FIVE
-; Author: Yongzhen Ren
+; Author: '(Yongzhen R.)
+
 
 ; All arguments new, old and a are atoms; L is a list.
 ; L can be a list of any type.
@@ -18,7 +19,7 @@
 	)
 )
 
-; Enhanced version of the function rember in Chapter_3.scm.
+; Enhanced version of the function rember in Chapter 3.
 ; a is an atom; L is a list of S-expressions.
 (define rember*
 	(lambda (a L)
@@ -38,7 +39,7 @@
 )
 
 ; Insert new behind old in L.
-; Enhanced version of the function insertR in Chapter_3.scm.
+; Enhanced version of the function insertR in Chapter 3.
 (define insertR*
 	(lambda (new old L)
 		(cond
@@ -57,7 +58,7 @@
 )
 
 ; The function counts the number of times an atom a appears in a list.
-; Enhanced version of the function occur in Chapter_4.scm.
+; Enhanced version of the function occur in Chapter 4.
 (define occur*
 	(lambda (a L)
 		(cond
@@ -74,7 +75,7 @@
 )
 
 ; The function replaces all occurrences of old in a list with new.
-; Enhanced version of the function multisubst in Chapter_3.scm.
+; Enhanced version of the function multisubst in Chapter 3
 (define subst*
 	(lambda (new old L)
 		(cond
@@ -91,7 +92,7 @@
 )
 
 ; The function builds a list with new inserted to the left of all ocurrences of old.
-; Enhanced version of the function insertL in Chapter_3.scm.
+; Enhanced version of the function insertL in Chapter 3.
 (define insertL*
 	(lambda (new old L)
 		(cond
@@ -108,7 +109,7 @@
 )
 
 ; The function checks if L contains a.
-; Enhanced version of the function member? in Chapter_2.scm.
+; Enhanced version of the function member? in Chapter 2.
 (define member*
 	(lambda (a L)
 		(cond
@@ -133,7 +134,7 @@
 	)
 )
 
-; It is the same function from Chapter_4.scm.
+; It is the same function from Chapter 4.
 ; The function returns #t if its two arguments are the same atom.
 ; All two arguments have to be atoms.
 (define eqan?
@@ -222,7 +223,7 @@
 )
 
 ; Go through a list and remove the first occurence of s.
-; Simplified version of the function rember in Chapter_3.scm.
+; Simplified version of the function rember in Chapter 3.
 ; s is an S-expression; L is a list of S-expressions.
 (define rember
 	(lambda (s L)

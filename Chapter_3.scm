@@ -1,5 +1,5 @@
 ; CHAPTER THREE
-; Author: Yongzhen Ren
+; Author: '(Yongzhen R.)
 
 
 ; Go through a lat and remove the first occurence of atom x.

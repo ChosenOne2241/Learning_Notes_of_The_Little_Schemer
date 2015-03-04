@@ -1,5 +1,5 @@
 ; CHAPTER FOUR
-; Author: Yongzhen Ren
+; Author: '(Yongzhen R.)
 
 
 ; In this chapter, we assume that all inputs should be integers.
@@ -146,8 +146,8 @@
 	)
 )
 
-; Calculate n^m.
-; m has to be bigger than or equal to 0.
+; Calculate n ^ m,
+; where n cannot be equal to 0 and m has to be bigger than or equal to 0.
 (define expt
 	(lambda (n m)
 		(cond

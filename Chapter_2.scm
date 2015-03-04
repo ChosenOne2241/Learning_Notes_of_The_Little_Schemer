@@ -1,5 +1,5 @@
 ; CHAPTER TWO
-; Author: Yongzhen Ren
+; Author: '(Yongzhen R.)
 
 
 ; This atom? function is a little different from what Petite Chez Scheme (which is what I currently use) implements.
@@ -38,7 +38,6 @@
 	)
 )
 
-; Implement built-in function.
 ; The function checks if L contains x.
 ; x has to be an atom here.
 (define member?
