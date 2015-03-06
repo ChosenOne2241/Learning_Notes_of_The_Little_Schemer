@@ -89,3 +89,57 @@
 		(and (subset? set1 set2) (subset? set2 set1))
 	)
 )
+
+; intersect? checks if two sets have intersection.
+(define intersect?
+	(lambda (set1 set2)
+		(cond
+			((null? set1) #f)
+			((member? (car set1) set2) #t)
+			(else (intersect? (cdr set1) set2))
+		)
+	)
+)
+
+; intersect? function with (or ...).
+(define intersect?
+	(lambda (set1 set2)
+		(cond
+			((null? set1) #f)
+			(else (or (member? (car set1) set2) (intersect? (cdr set1) set2)))
+		)
+	)
+)
+
+; The function returns the intersection of two sets.
+(define intersect
+	(lambda (set1 set2)
+		(cond
+			((null? set1) '())
+			((member? (car set1) set2) (cons (car set1) (intersect (cdr set1) set2)))
+			(else (intersect (cdr set1) set2))
+		)
+	)
+)
+
+; The function returns the union of two sets.
+(define union
+	(lambda (set1 set2)
+		(cond
+			((null? set1) set2)
+			((member? (car set1) set2) (union (cdr set1) set2))
+			(else (cons (car set1) (union (cdr set1) set2)))
+		)
+	)
+)
+
+; The function returns the difference of two sets (set1 / set2)
+(define difference
+	(lambda (set1 set2)
+		(cond
+			((null? set1) '())
+			((member? (car set1) set2) (difference (cdr set1) set2))
+			(else (cons (car set1) (difference (cdr set1) set2)))
+		)
+	)
+)
