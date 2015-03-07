@@ -259,6 +259,18 @@
 	)
 )
 
+; Return all the first ones in order of a list of S-expressions.
+(define seconds
+	(lambda (L)
+		(cond
+			((null? L) '())
+			((null? (car L)) '())
+			((null? (cdr (car L))) '())
+			(else (cons (car (cdr (car L))) (seconds (cdr L))))
+		)
+	)
+)
+
 ; The term *full function* (fullfun) means a fun with all second items being a set.
 ; fullfun? is to check if a rel is a full function.
 (define fullfun?
@@ -267,7 +279,3 @@
 		; (set? (firsts (revrel fun)))
 	)
 )
-
-; Return all the first ones in order of a list of S-expressions.
-(define seconds
-	(lambda (L)
