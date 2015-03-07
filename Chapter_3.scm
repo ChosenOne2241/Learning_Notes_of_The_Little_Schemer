@@ -25,14 +25,13 @@
 	)
 )
 
-; Return all the first ones in order of a list of S-expressions.
+; Return all the first ones in order of a list of non-empty lists or a null list.
 (define firsts
 	(lambda (L)
 		(cond
 			((null? L) '())
-			((list? (car L)) (cons (car (car L)) (firsts (cdr L))))
-			; If it is not empty or a list, it must be an atom in this case.
-			(#t (cons (car L) (firsts (cdr L))))
+			; Since (car L) is non-empty, (car (car L)) cannot be empty too.
+			(else (cons (car (car L)) (firsts (cdr L))))
 		)
 	)
 )

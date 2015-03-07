@@ -208,15 +208,14 @@
 	)
 )
 
-; Return all the first ones in order of a list of S-expressions.
+; Return all the first ones in order of a list of non-empty lists or a null list.
 ; Exactly the same function from Chapter 3, used in fun?.
 (define firsts
 	(lambda (L)
 		(cond
 			((null? L) '())
-			((list? (car L)) (cons (car (car L)) (firsts (cdr L))))
-			; If it is not empty or a list, it must be an atom in this case.
-			(#t (cons (car L) (firsts (cdr L))))
+			; Since (car L) is non-empty, (car (car L)) cannot be empty too.
+			(else (cons (car (car L)) (firsts (cdr L))))
 		)
 	)
 )
@@ -259,13 +258,15 @@
 	)
 )
 
-; Return all the first ones in order of a list of S-expressions.
+; The function returns all the first ones in order of a list of non-empty lists
+; or a null list.
 (define seconds
 	(lambda (L)
 		(cond
 			((null? L) '())
-			((null? (car L)) '())
-			((null? (cdr (car L))) '())
+			((null? (cdr (car L))) (seconds (cdr L)))
+			; Although (car (car L)) cannot be empty,
+			; it does not mean (cdr (car L)) has to return non-empty element.
 			(else (cons (car (cdr (car L))) (seconds (cdr L))))
 		)
 	)
@@ -276,6 +277,12 @@
 (define fullfun?
 	(lambda (fun)
 		(set? (seconds fun))
-		; (set? (firsts (revrel fun)))
+	)
+)
+
+; one-to-one? is an alias of fullfun?.
+(define one-to-one?
+	(lambda (fun)
+		(fun? (revrel fun))
 	)
 )
