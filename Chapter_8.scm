@@ -2,6 +2,12 @@
 ; Author: '(Yongzhen R.)
 
 
+(define atom?
+	(lambda (x)
+		(and (not (pair? x)) (not (null? x)))
+	)
+)
+
 ; rember-f goes through l and remove the first occurence of a according to
 ; testing condition test?. General version of the same function in Chapter 3.
 (define rember-f
@@ -314,5 +320,101 @@
 			)
 			(else (multiinsertLR&co new oldL oldR (cdr lat) col))
 		)
+	)
+)
+
+; check-even? is to check if n is even.
+; This function does not work in Petite since it will not truncate while doing division.
+(define check-even?
+	(lambda (n)
+		(= (* (/ n 2) 2) n)
+	)
+)
+
+; The function removes all odd numbers from a list of nested lists.
+; L should just contain numbers or lists of numbers.
+(define evens-only*
+	(lambda (L)
+		(cond
+			((null? L) '())
+			((atom? (car L))
+				(cond
+					((even? (car L)) (cons (car L) (evens-only* (cdr L))))
+					(else (evens-only* (cdr L)))
+				)
+			)
+			(else (cons (evens-only* (car L)) (evens-only* (cdr L))))
+		)
+	)
+)
+
+; The version of evens-only* using list? to simplify it.
+(define evens-only*
+	(lambda (L)
+		(cond
+			; If L is empty.
+			((null? L) '())
+			; If the first element in L is a list.
+			((list? (car L)) (cons (evens-only* (car L)) (evens-only* (cdr L))))
+			; If it is even (an atom).
+			((even? (car L)) (cons (car L) (evens-only* (cdr L))))
+			; If it is odd (an atom).
+			(else (evens-only* (cdr L)))
+		)
+	)
+)
+
+; The function builds a nested list of even numbers by removing the odd ones
+; from its argument and simultaneously multiplies the even numbers and
+; sums up the odd numbers that occur in its argument.
+(define evens-only*&co
+	(lambda (L col)
+		(cond
+			((null? L) (col '() 1 0))
+			((atom? (car L))
+				(cond
+					((even? (car L))
+						(evens-only*&co (cdr L)
+							(lambda (newlist e_pro o_sum)
+								(col (cons (car L) newlist) (* (car L) e_pro) o_sum)
+							)
+						)
+					)
+					(else
+						(evens-only*&co (cdr L)
+							(lambda (newlist e_pro o_sum)
+								(col newlist e_pro (+ (car L) o_sum))
+							)
+						)
+					)
+				)
+			)
+			(else
+				(evens-only*&co (car L) ; (1)
+					; The collector conses together the results for the lists in
+					; the car and the cdr and multiplies and adds the respective
+					; products and sums.
+					; Then it passes these values to the old collector.
+					; MOST TRICKY PART in the function.
+					(lambda (newlist e_pro o_sum)
+						(evens-only*&co (cdr L) ; (2)
+						; Statements (1) and (2) can exchange their position.
+							(lambda (nl ep os)
+								(col (cons newlist nl) (* e_pro ep) (+ o_sum os))
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+)
+
+; The function is used to test evens-only*&co.
+; Ask: (evens-only*&co '((9 1 2 8) 3 10 ((9 9) 7 6) 2) the-last-friend)
+; Answer: (38 1920 (2 8) 10 (() 6) 2)
+(define the-last-friend
+	(lambda (newl product sum)
+		(cons sum (cons product newl))
 	)
 )
