@@ -161,7 +161,7 @@
 	)
 )
 
-; Pair is a list containing just two S-expressions, such as (a (a b)), (3 4).
+; Pair is a list containing exactly two S-expressions, such as (a (a b)), (3 4).
 ; a-pair? checks if L is a pair.
 (define a-pair?
 	(lambda (L)

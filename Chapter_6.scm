@@ -70,7 +70,7 @@
 )
 
 ; Using three help functions (1st-sub-exp, 2nd-sub-exp and operator),
-; rewrite value function to parse Polish expression (such as + 3 4).
+; rewrite value function to parse Polish expression (such as (+ 3 4)).
 (define value
 	(lambda (nexp)
 		(cond
@@ -105,6 +105,7 @@
 	)
 )
 
+; Similar to addition for natural numbers.
 (define edd
 	(lambda (m n)
 		(cond

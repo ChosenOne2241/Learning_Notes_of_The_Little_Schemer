@@ -72,7 +72,8 @@
 	)
 )
 
-; The function traverses two tups at the same time and add two numbers with the same index to return a new tup.
+; The function traverses two tups at the same time and add two numbers
+; with the same index to return a new tup.
 ; tup1 and tup2 can be different length.
 (define tup+
 	(lambda (tup1 tup2)
@@ -117,9 +118,9 @@
 (define =
 	(lambda (n m)
 		(cond
-			((and (zero? n) (zero? m)) #t) ; 1
-			((not (or (zero? n) (zero? m))) (= (sub1 n) (sub1 m))) ; 2
-			(else #f) ; 3 & 4
+			((and (zero? n) (zero? m)) #t) ; (1)
+			((not (or (zero? n) (zero? m))) (= (sub1 n) (sub1 m))) ; (2)
+			(else #f) ; (3) & (4)
 		)
 	)
 )
@@ -179,7 +180,7 @@
 )
 
 ; Pick the nth S-expression from a lat.
-; n should be bigger than 0; lat cannot be an empty list and the length of lat has to be bigger than 0.
+; n should be bigger than 0; the length of lat cannot be smaller than n.
 (define pick
 	(lambda (n lat)
 		(cond
@@ -190,7 +191,8 @@
 )
 
 ; Remove the nth S-expression in a lat.
-; n should be bigger than 0; lat cannot be an empty list and the length of lat has to be bigger than 0.
+; n should be bigger than 0; lat cannot be an empty list and
+; the length of lat has to be bigger than 0.
 (define rempick
 	(lambda (n lat)
 		(cond

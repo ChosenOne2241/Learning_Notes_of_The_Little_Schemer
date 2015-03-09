@@ -298,7 +298,7 @@
 	)
 )
 
-; When multiinsertLR&co is done, it will use col on the new lat ,
+; When multiinsertLR&co is done, it will use col on the new lat,
 ; on the number of left insertions, and the number of right insertions.
 (define multiinsertLR&co
 	(lambda (new oldL oldR lat col)
@@ -323,8 +323,8 @@
 	)
 )
 
-; check-even? is to check if n is even.
-; This function does not work in Petite since it will not truncate while doing division.
+; check-even? is to check if n is even. This function does NOT work in Petite
+; since it will not truncate while doing division.
 (define check-even?
 	(lambda (n)
 		(= (* (/ n 2) 2) n)

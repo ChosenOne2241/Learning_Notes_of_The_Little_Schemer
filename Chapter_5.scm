@@ -75,7 +75,7 @@
 )
 
 ; The function replaces all occurrences of old in a list with new.
-; Enhanced version of the function multisubst in Chapter 3
+; Enhanced version of the function multisubst in Chapter 3.
 (define subst*
 	(lambda (new old L)
 		(cond
@@ -123,7 +123,8 @@
 	)
 )
 
-; The function leftmost finds the leftmost atom in a non-empty list of S-expressions that does not contain the empty list.
+; The function leftmost finds the leftmost atom in a non-empty list of S-expressions
+; that does not contain the empty list.
 (define leftmost
 	(lambda (L)
 		(cond

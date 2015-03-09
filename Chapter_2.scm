@@ -2,26 +2,14 @@
 ; Author: '(Yongzhen R.)
 
 
-; This atom? function is a little different from what Petite Chez Scheme (which is what I currently use) implements.
-; Here is the information about how atom? act in Petite:
+; This atom? function is a little different from what Petite Chez Scheme
+; (which is what I currently use) implements.
+; Here is an article about how atom? act in Petite:
 ; http://www.scheme.com/csug8/objects.html
 ; Therefore, it is included here so that other programs calling the function can run correctly.
 (define atom?
 	(lambda (x)
 		(and (not (pair? x)) (not (null? x)))
-	)
-)
-
-; Implement built-in function.
-; Append function is used to connect two lists.
-(define append
-	(lambda (A B)
-		(cond
-			((null? A) B)
-			(#t (cons (car A) (append (cdr A) B)))
-		)
-		; (if (null? A) B (cons (car A) (append (cdr A) B)))
-		; The above statement is more concise.
 	)
 )
 
