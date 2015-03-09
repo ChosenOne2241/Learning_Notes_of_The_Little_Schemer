@@ -31,7 +31,7 @@
 	such as '(1 2), '((a b) c), and '((ab 1) (2 cd)).
 
 * **_Rel (Relation):_**
-	a set of pairs, such as ((1 2) (1 3) (3 4)), and '((a b) (1 c)).
+	a set of pairs, such as '((1 2) (1 3) (3 4)), and '((a b) (1 c)).
 
 * **_Fun (Function):_**
 	a set of pairs, where the return value of (firsts X<sub>i</sub>)
