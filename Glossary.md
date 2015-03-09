@@ -12,9 +12,9 @@
         * Lat
         * Tup
         * Set
-           * Rel
-           * Fun
-           * ...
+             * Rel
+             * Fun
+             * ...
         * ...
 
 ## Explanation of Some Non-trivial Terms
