@@ -37,7 +37,6 @@
 )
 
 ; eternity is the most partial function, which will infinite recursion.
-; DO NOT TRY TO RUN IT.
 (define eternity
 	(lambda (x)
 		(eternity x)
@@ -76,6 +75,13 @@
 	)
 )
 
+; We include this function here only because a-pair? use it.
+(define atom?
+	(lambda (x)
+		(and (not (pair? x)) (not (null? x)))
+	)
+)
+
 ; Pair is a list containing just two S-expressions, such as (a (a b)), (3 4).
 ; a-pair? checks if L is a pair.
 ; Exactly the same function from Chapter 7.
@@ -98,7 +104,7 @@
 
 ; align goes through a pair of two elements (two pairs / two atoms / a pair and an atom)
 ; and do shift opeartion on it if the first element of the pair is also a pair.
-; Otherwise, let it be.
+; Otherwise, let it be. And it is a total function.
 (define align
 	(lambda (pora)
 		(cond
@@ -107,4 +113,257 @@
 			(else (build (first pora) (align (second pora))))
 		)
 	)
+)
+
+; length* counts the number of atoms in align's arguments in a weird way,
+; which means it can only handle pairs correctly.
+; For example, (length* '(a (b c d))) --> 3;
+;              (length* '((a b) (c d) e) --> 4;
+;              (length* '((a b) (c (d e))) --> 5.
+(define length*
+	(lambda (pora)
+		(cond
+			((atom? pora) 1)
+			(else (+ (length* (first pora)) (length* (second pora))))
+		)
+	)
+)
+
+; weight* is the same as length* but doubles the first component in the pair.
+; For example, (weight* '((a b) c)) --> 7;
+;              (weight* '(a (b c))) --> 5.
+(define weight*
+	(lambda (pora)
+		(cond
+			((atom? pora) 1)
+			(else (+ (* (weight* (first pora)) 2) (weight* (second pora))))
+		)
+	)
+)
+
+; revpair reverses the two components of a pair,
+; used in revised revrel function.
+; Exactly the same function from Chapter 7.
+(define revpair
+	(lambda (pair)
+		(build (second pair) (first pair))
+	)
+)
+
+; shuffle is the same as align but uses revpair instead of shift,
+; which is a partial function (try (shuffle '((a b) (c d)))).
+(define shuffle
+	(lambda (pora)
+		(cond
+			((atom? pora) pora)
+			((a-pair? (first pora)) (shuffle (revpair pora)))
+			(else (build (first pora) (shuffle (second pora))))
+		)
+	)
+)
+
+; A more concise version of function one?.
+; Exactly the same function from Chapter 4.
+(define one?
+	(lambda (n)
+		(= n 1)
+	)
+)
+
+; Exactly the same function from Chapter 4.
+(define add1
+	(lambda (n)
+		(+ n 1)
+	)
+)
+
+; This is a function to check the correctness of The Collatz conjecture (Kakutani's problem).
+(define C
+	(lambda (n)
+		(cond
+			((one? n) 1)
+			(else
+				(cond
+					((even? n) (C (/ n 2)))
+					(else (C (add1 (* 3 n))))
+				)
+			)
+		)
+	)
+)
+
+; Exactly the same function from Chapter 4.
+(define sub1
+	(lambda (n)
+		(- n 1)
+	)
+)
+
+; A is an Ackermann function, which is an total computable function that is not primitive recursive.
+; For example, (A 4 3) will not have a final certain answer.
+(define A
+	(lambda (n m)
+		(cond
+			((zero? n) (add1 m))
+			((zero? m) (A (sub1 n) 1))
+			(else (A (sub1 n) (A n (sub1 m))))
+		)
+	)
+)
+
+; s/c stands for short circuit, which is a total function.
+(define s/c
+	(lambda (L)
+		(and #f (eternity L))
+		; (and (eternity L) #f)
+		; But with the statement above, the program will not stop.
+	)
+)
+
+; Standard length function.
+(define length
+	(lambda (l)
+		(cond
+			((null? l) 0)
+			(else (add1 (length (cdr l))))
+		)
+	)
+)
+
+; length_0 function.
+(lambda (l)
+	(cond
+		((null? l) 0)
+		(else (add1 (eternity (cdr l))))
+	)
+)
+
+; The first version of length_<=1 function.
+(lambda (l)
+	(cond
+		((null? l) 0)
+		(else (add1 (length0 (cdr l))))
+	)
+)
+
+; The second version of length_<=1 function (replace length_0 with its definition).
+(lambda (l)
+	(cond
+		((null? l) 0)
+		(else
+			(add1
+				(
+					(lambda (l)
+						(cond
+							((null? l) 0)
+							(else (add1 (eternity (cdr l))))
+						)
+					) (cdr l) ; (length_0 (cdr l))
+				)
+			)
+		)
+	)
+)
+
+; length_<=2 function.
+(lambda (l)
+	(cond
+		((null? l) 0)
+		(else
+			(add1
+				(
+					(lambda (l)
+						(cond
+							((null? l) 0)
+							(else
+								(add1
+									(
+										(lambda (l)
+											(cond
+												((null? l) 0)
+												(else (add1 (eternity (cdr l))))
+											)
+										) (cdr l) ; (length_0 (cdr l))
+									)
+								)
+							)
+						)
+					) (cdr l) ; (length_<=1 (cdr l))
+				)
+			)
+		)
+	)
+)
+
+; This is actually length_0 function.
+(
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	) eternity ; eternity here acts as an argument (length).
+)
+
+; Rewrite length_<=1 in the same style.
+; All fs and gs can be replace by length as we used before.
+(
+	(lambda (f)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (f (cdr l))))
+			)
+		)
+	)
+	; The code bewtween two asterisks (length_0) acts as an argument (f).
+	; *
+	(
+		(lambda (g)
+			(lambda (l)
+				(cond
+					((null? l) 0)
+					(else (add1 (g (cdr l))))
+				)
+			)
+		) eternity
+	)
+	; *
+)
+
+; Rewrite length_<=2 in the same style.
+(
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	)
+	; The code bewtween two asterisks (length_1) acts as an argument (length).
+	; *
+	(
+		(lambda (length)
+			(lambda (l)
+				(cond
+					((null? l) 0)
+					(else (add1 (length (cdr l))))
+				)
+			)
+		)
+		(
+			(lambda (length)
+				(lambda (l)
+					(cond
+						((null? l) 0)
+						(else (add1 (length (cdr l))))
+					)
+				)
+			) eternity
+		)
+	)
+	; *
 )
