@@ -242,7 +242,7 @@
 (lambda (l)
 	(cond
 		((null? l) 0)
-		(else (add1 (length0 (cdr l))))
+		(else (add1 (length_0 (cdr l))))
 	)
 )
 
@@ -265,7 +265,15 @@
 	)
 )
 
-; length_<=2 function.
+; The first version of length_<=2 function.
+(lambda (l)
+	(cond
+		((null? l) 0)
+		(else (add1 (length_<=1 (cdr l))))
+	)
+)
+
+; The second version of length_<=2 function (replace length_<=1 with its definition).
 (lambda (l)
 	(cond
 		((null? l) 0)
@@ -295,7 +303,7 @@
 	)
 )
 
-; This is actually length_0 function.
+; This is actually a different way to implement length_0 function.
 (
 	(lambda (length)
 		(lambda (l)
@@ -307,7 +315,19 @@
 	) eternity ; eternity here acts as an argument (length).
 )
 
-; Rewrite length_<=1 in the same style.
+; Rewrite length_<=1 in the same style using length_0.
+(
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	) length_0 ; length_0 here acts as an argument (length).
+)
+
+; Rewrite length_<=1 in the same style replacing length_0 with its definition.
 ; All fs and gs can be replace by length as we used before.
 (
 	(lambda (f)
@@ -333,7 +353,19 @@
 	; *
 )
 
-; Rewrite length_<=2 in the same style.
+; Rewrite length_<=2 in the same style using length_<=1.
+(
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	) length_<=1 ; length_<=1 here acts as an argument (length).
+)
+
+; Rewrite length_<=2 in the same style replacing length_0 with its definition.
 (
 	(lambda (length)
 		(lambda (l)
@@ -343,7 +375,7 @@
 			)
 		)
 	)
-	; The code bewtween two asterisks (length_1) acts as an argument (length).
+	; The code bewtween two asterisks (length_<=1) acts as an argument (length).
 	; *
 	(
 		(lambda (length)
@@ -366,4 +398,164 @@
 		)
 	)
 	; *
+)
+
+; Simplify the rewritten version of length_0 function.
+(
+	(lambda (mk-length)
+		(mk-length eternity)
+	)
+	; The code bewtween two asterisks acts as an argument (mk-length).
+	; *
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	)
+	; *
+)
+
+; Simplify the rewritten version of length_<=1 function.
+(
+	(lambda (mk-length)
+		(mk-length ; (mk-length length_0) --> length_<=1
+			(mk-length eternity) ; length_0
+			; We can use recursively simply because all length_*
+			; functions share the same pattern, which will be passed by mk-length argument.
+		)
+	)
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	)
+)
+
+; Simplify the rewritten version of length_<=2 function.
+(
+	(lambda (mk-length)
+		(mk-length ; (mk-length length_<=1) --> length_<=2
+			(mk-length ; (mk-length length_0) --> length_<=1
+				(mk-length eternity) ; length_0
+			)
+		)
+	)
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	)
+)
+
+; Simplify the rewritten version of length_<=3 function.
+(
+	(lambda (mk-length)
+		(mk-length ; (mk-length length_<=2) --> length_<=3
+			(mk-length ; (mk-length length_<=1) --> length_<=2
+				(mk-length ; (mk-length length_0) --> length_<=1
+					(mk-length eternity) ; length_0
+				)
+			)
+		)
+	)
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+			)
+		)
+	)
+)
+
+; This is still length_0 function.
+(
+	(lambda (mk-length)
+		(mk-length mk-length)
+		; We replace eternity with mk-length, since nobody cares what function
+		; we pass to mk-length (theoretically eternity part will never be run).
+	)
+	(lambda (length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (length (cdr l))))
+				; When l is not empty, the statement does not work at here (because of lack of arugments),
+				; which has the same effect as we use eternity function.
+			)
+		)
+	)
+)
+
+; For the last version of length_0 function, we can even replace length with mk-length.
+(
+	(lambda (mk-length)
+		(mk-length mk-length)
+	)
+	(lambda (mk-length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 (mk-length (cdr l))))
+			)
+		)
+	)
+)
+
+; We rewrite length_<=1 based on the newest version of length_0.
+(
+	(lambda (mk-length)
+		(mk-length mk-length)
+	)
+	(lambda (mk-length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 ((mk-length eternity) (cdr l))))
+			)
+		)
+	)
+)
+
+; We rewrite length function based on the newest version of length_<=1.
+; It keeps adding recursive uses by passing mk-length to itself, just
+; as it is about to expire.
+(
+	(lambda (mk-length)
+		(mk-length mk-length)
+	)
+	(lambda (mk-length)
+		(lambda (l)
+			(cond
+				((null? l) 0)
+				(else (add1 ((mk-length mk-length) (cdr l))))
+			)
+		)
+	)
+)
+
+; We extract a new application of mk-length to iteself and call it length.
+(
+	(lambda (mk-length)
+		(mk-length mk-length)
+	)
+	(lambda (mk-length)
+		(lambda (length)
+			(lambda (l)
+				(cond
+					((null? l) 0)
+					(else (add1 (length (cdr l))))
+				)
+			) (mk-length mk-length)
+		)
+	)
 )

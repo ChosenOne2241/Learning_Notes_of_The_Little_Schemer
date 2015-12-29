@@ -2,7 +2,7 @@
 ; Author: '(Yongzhen R.)
 
 
-; This atom? function is a little different from what Petite Chez Scheme
+; This atom? function is slightly different from what Petite Chez Scheme
 ; (which is what I currently use) implements.
 ; Here is an article about how atom? act in Petite:
 ; http://www.scheme.com/csug8/objects.html

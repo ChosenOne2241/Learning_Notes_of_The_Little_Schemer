@@ -4,7 +4,7 @@
 
 ; In this chapter, we assume that all inputs should be integers.
 
-; add1 and sub1 are also built-in functions in Petite.
+; add1 and sub1 are actually built-in functions in Petite.
 (define add1
 	(lambda (n)
 		(+ n 1)
@@ -129,9 +129,13 @@
 (define =
 	(lambda (n m)
 		(cond
-			((zero? n) (zero? m)) ; 1 & 3
-			((zero? m) #f) ; 4
-			(else (= (sub1 n) (sub1 m)))
+			((zero? n) (zero? m)) ; (1) & (3)
+			((zero? m) #f) ; (4)
+			(else (= (sub1 n) (sub1 m))) ; (2)
+			; The code below is from the book.
+			; ((zero? m) (zero? n)) ; (1) & (4)
+			; ((zero? n) #f) ; (3)
+			; (else (= (sub1 n) (sub1 m))) ; (2)
 		)
 	)
 )
@@ -158,7 +162,7 @@
 	)
 )
 
-; Division.
+; Division (similar to quotient function in Scheme).
 ; m has to be bigger than or equal to 0.
 (define div
 	(lambda (n m)
@@ -180,19 +184,20 @@
 )
 
 ; Pick the nth S-expression from a lat.
-; n should be bigger than 0; the length of lat cannot be smaller than n.
+; n should be greater than 0; the length of lat cannot be less than n.
 (define pick
 	(lambda (n lat)
 		(cond
 			((zero? (sub1 n)) (car lat))
+			; ((= n 1) (car lat))
 			(#t (pick (sub1 n) (cdr lat)))
 		)
 	)
 )
 
 ; Remove the nth S-expression in a lat.
-; n should be bigger than 0; lat cannot be an empty list and
-; the length of lat has to be bigger than 0.
+; n should be greater than 0; lat cannot be an empty list and
+; the length of lat has to be greater than 0.
 (define rempick
 	(lambda (n lat)
 		(cond

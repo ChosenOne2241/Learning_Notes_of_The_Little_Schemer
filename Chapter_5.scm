@@ -2,11 +2,10 @@
 ; Author: '(Yongzhen R.)
 
 
-; All arguments new, old and a are atoms; L is a list.
-; L can be a list of any type.
-; e.g: a list of purely lists or a lat or a list containing lists and atoms.
+; Arguments like new, old and a are atoms; L is a list of S-expressions;
+; S is an S-expression.
 
-; It is included here so that other programs calling the function can run correctly.
+; atom? and add1 are included here so that other programs calling the function can run correctly.
 (define atom?
 	(lambda (x)
 		(and (not (pair? x)) (not (null? x)))
@@ -20,7 +19,6 @@
 )
 
 ; Enhanced version of the function rember in Chapter 3.
-; a is an atom; L is a list of S-expressions.
 (define rember*
 	(lambda (a L)
 		(cond
@@ -34,6 +32,17 @@
 			; When (car L) is a list.
 			(else (cons (rember* a (car L)) (rember* a (cdr L))))
 			; The SECOND argument to cons must be a LIST. The result is a list.
+		)
+	)
+)
+
+; Check if a list is a lat.
+(define lat?
+	(lambda (L)
+		(cond
+			((null? L) #t)
+			((atom? (car L)) (lat? (cdr L)))
+			(else #f)
 		)
 	)
 )
@@ -115,8 +124,12 @@
 		(cond
 			((null? L) #f)
 			((atom? (car L))
-				(or (eq? a (car L)) (member* a (cdr L)))
-				; Using keyword or here instead of keyword else makes the piece of codes uniform.
+				(cond
+					((eq? a (car L)) #t)
+					(else (member* a (cdr L)))
+				)
+				; (or (eq? a (car L)) (member* a (cdr L)))
+				; The statement from the book has the same effect.
 			)
 			(else (or (member* a (car L)) (member* a (cdr L))))
 		)
@@ -128,12 +141,15 @@
 (define leftmost
 	(lambda (L)
 		(cond
-			; ((null? L) '())
 			((atom? (car L)) (car L))
 			(else (leftmost (car L)))
 		)
 	)
 )
+
+; (and alpha beta) => (cond (alpha beta) (else #f))
+; (or alpha beta) => (cond (alpha #t) (else #f))
+; Boolean operators are short-circuit in Scheme.
 
 ; It is the same function from Chapter 4.
 ; The function returns #t if its two arguments are the same atom.
@@ -150,15 +166,38 @@
 )
 
 ; The function using eqan? determines if two lists are equal.
-; Verbose version.
+; Textbook version 1.
+(define eqlist?
+	(lambda (L1 L2)
+		(cond
+			; When (null? L1) is #t; i.e. L1 is empty.
+			((and (null? L1) (null? L2)) #t)
+			((and (null? L1) (atom? (car L2))) #f)
+			((null? L1) #f)
+			; When (atom? (car L1)) is #t; i.e. L1 is an atom.
+			((and (atom? (car L1)) (null? L2)) #f)
+			((and (atom? (car L1)) (atom? (car L2))) (and (eqan? (car L1) (car L2)) (eqlist? (cdr L1) (cdr L2))))
+			; ((and (atom? (car L1)) (atom? (car L2)) (eqan? (car L1) (car L2))) (eqlist? (cdr L1) (cdr L2)))
+			; Both of statements above have the same effect.
+			((atom? (car L1)) #f)
+			; When (car L1) is a list.
+			((null? L2) #f)
+			((atom? (car L2)) #f)
+			(else (and (eqlist? (car L1) (car L2)) (eqlist? (cdr L1) (cdr L2))))
+		)
+	)
+)
+
+; The function using eqan? determines if two lists are equal.
+; Improved way of textbook version 1.
 (define eqlist?
 	(lambda (L1 L2)
 		(cond
  			((null? L1)
 				(cond
 					((null? L2) #t)
-					((atom? (car L2)) #f)
-					(else #f) ; If (car L2) is a list.
+					; ((atom? (car L2)) #f) ; The statement can be removed.
+					(else #f)
 				)
 			)
 			((atom? (car L1))
@@ -168,7 +207,7 @@
 					(else #f)
 				)
 			)
-			(else ; If (car L1) is a list.
+			(else ; When (car L1) is a list.
 				(cond
 					((null? L2) #f)
 					((atom? (car L2)) #f)
@@ -179,8 +218,23 @@
 	)
 )
 
+; The function using eqan? determines if two lists are equal.
+; Textbook version 2.
+(define eqlist?
+	(lambda (L1 L2)
+		(cond
+			((and (null? L1) (null? L2)) #t)
+			((or (null? L1) (null? L2)) #f) ; One of (null? L1) and (null? L2) must be #t here.
+			; From the statement below, both of L1 and L2 cannot be null.
+			((and (atom? (car L1)) (atom? (car L2))) (and (eqan? (car L1) (car L2)) (eqlist? (cdr L1) (cdr L2))))
+			((or (atom? (car L1)) (atom? (car L1))) #f)
+			(else (and (eqlist? (car L1) (car L2)) (eqlist? (cdr L1) (cdr L2))))
+		)
+	)
+)
+
 ; The function uses eqan? and eqlist? to check if S1 and S2 are the same S-expression.
-; eqan? (atoms) ---> eqlist? (lists) ---> equal? (S-expressions)
+; eq? / eqan? (atoms) ---> eqlist? (lists) ---> equal? (S-expressions)
 (define equal?
 	(lambda (S1 S2)
 		(cond
@@ -212,6 +266,7 @@
 )
 
 ; Simplified version of function eqlist? using equal?.
+; N.B.: now eqlist? and equal? invoke each other in their function body.
 (define eqlist?
 	(lambda (L1 L2)
 		(cond
@@ -225,13 +280,12 @@
 
 ; Go through a list and remove the first occurence of s.
 ; Simplified version of the function rember in Chapter 3.
-; s is an S-expression; L is a list of S-expressions.
 (define rember
-	(lambda (s L)
+	(lambda (S L)
 		(cond
 			((null? L) '())
-			((equal? s (car L)) (cdr L))
-			(else (cons (car L) (rember s (cdr L))))
+			((equal? S (car L)) (cdr L)) ; Simply replace eq? with equal?.
+			(else (cons (car L) (rember S (cdr L))))
 		)
 	)
 )
