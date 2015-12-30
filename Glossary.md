@@ -20,6 +20,15 @@
 ## Explanation of Some Non-trivial Terms
 >> According to the order of appearance in the *The Little Schemer*.
 
+* **_S-expression:_**
+	symbolic expression; all atoms and lists are S-expression.
+
+* **_Atom:_**
+	a string of characters, or a string of digits, or with other special characters.
+
+* **_List:_**
+	n (n >= 0) S-expressions enclosed by parentheses.
+
 * **_Lat:_**
 	a list of atoms, such as '(1 2 3), '(a), and '(a b 1 2).
 

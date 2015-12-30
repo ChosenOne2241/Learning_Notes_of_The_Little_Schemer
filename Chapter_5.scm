@@ -129,7 +129,7 @@
 					(else (member* a (cdr L)))
 				)
 				; (or (eq? a (car L)) (member* a (cdr L)))
-				; The statement from the book has the same effect.
+				; The statement below has the same effect.
 			)
 			(else (or (member* a (car L)) (member* a (cdr L))))
 		)
@@ -147,8 +147,8 @@
 	)
 )
 
-; (and alpha beta) => (cond (alpha beta) (else #f))
-; (or alpha beta) => (cond (alpha #t) (else #f))
+; (and alpha beta) == (cond (alpha beta) (else #f))
+; (or alpha beta) == (cond (alpha #t) (else #f))
 ; Boolean operators are short-circuit in Scheme.
 
 ; It is the same function from Chapter 4.

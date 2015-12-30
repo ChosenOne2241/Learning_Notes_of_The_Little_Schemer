@@ -25,13 +25,14 @@
 	)
 )
 
-; Return all the first ones in order of a list of non-empty lists or a null list.
+; Return all the first ones in order of a list of non-empty lists or return a null list.
 (define firsts
 	(lambda (L)
 		(cond
 			((null? L) '())
 			; Since (car L) is non-empty, (car (car L)) cannot be empty too.
 			(else (cons (car (car L)) (firsts (cdr L))))
+			; (else (cons (caar L) (firsts (cdr L))))
 		)
 	)
 )

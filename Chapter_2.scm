@@ -2,6 +2,10 @@
 ; Author: '(Yongzhen R.)
 
 
+; cons: construct;
+; car: contents of address part of register;
+; cdr: contents of decrement part of register.
+
 ; This atom? function is slightly different from what Petite Chez Scheme
 ; (which is what I currently use) implements.
 ; Here is an article about how atom? act in Petite:

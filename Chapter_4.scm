@@ -111,10 +111,10 @@
 
 ; Both n and m have to be bigger than or equal to 0.
 ; The code is based on such an idea:
-; 1. if (n == 0) and (m == 0) ---> #t
-; 2. if (n != 0) and (m != 0) ---> Recursion.
-; 3. if (n == 0) and (m != 0) ---> #f
-; 4. if (n != 0) and (m == 0) ---> #f
+; 1. if (n == 0) and (m == 0) => #t
+; 2. if (n != 0) and (m != 0) => Recursion.
+; 3. if (n == 0) and (m != 0) => #f
+; 4. if (n != 0) and (m == 0) => #f
 (define =
 	(lambda (n m)
 		(cond

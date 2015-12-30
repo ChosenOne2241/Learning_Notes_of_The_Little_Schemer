@@ -19,11 +19,18 @@
 	)
 )
 
+; (eq? 'a 'a) => #t
+; (define x 'a)
+; (define y 'a)
+; (eq? x y) => #t (in the textbook) / #f (in Petite)
+
 ; numbered? determines whether a representation of an arithmetic expression
-; contains only numbers besides the + , * , and ^.
-; Warning: this function only works for expressions like "(3 + 6) * (4 ^ 2)"
-; (where same structures are at two sides of the operand);
-; tf user inputs "(3 + 7 7)", it will return #t (which should be wrong).
+; contains only numbers and opeartors (+, * and ^).
+; For the purpose of this chapter, an arithmetic expression is either an atom
+; (including numbers), or two arithmetic expressions combined by +, *, or ^
+; (infix expression), which means the program can only handle expressions like
+; ((3 + 6) * (4 ^ 2)) (where same structures are at two sides of the operand)
+; instead of (3 + 4 + 5).
 (define numbered?
 	(lambda (aexp)
 		(cond
@@ -35,8 +42,19 @@
 	)
 )
 
+; Since aexp was already understood to be an arithmetic expression,
+; there is a simplified version of numbered?.
+(define numbered?
+	(lambda (aexp)
+		(cond
+			((atom? aexp) (number? aexp))
+			(else (and (numbered? (car aexp)) (numbered? (car (cdr (cdr aexp))))))
+		)
+	)
+)
+
 ; value returns the values of a regular arithmetic expression
-; with numbers and opeartors(+, * and ^).
+; with numbers and opeartors (+, * and ^).
 (define value
 	(lambda (nexp)
 		(cond
@@ -70,7 +88,11 @@
 )
 
 ; Using three help functions (1st-sub-exp, 2nd-sub-exp and operator),
-; rewrite value function to parse Polish expression (such as (+ 3 4)).
+; rewrite value function to parse Polish expression (such as (+ 3 4)):
+; - number,
+; - a list of the atom + followed by two arithmetic expressions,
+; - a list of the atom * followed by two arithmetic expressions, or
+; - a list of the atom ^ followed by two arithmetic expressions.
 (define value
 	(lambda (nexp)
 		(cond
@@ -82,7 +104,7 @@
 	)
 )
 
-; Use parantheses to represent natual numbers:
+; Use parentheses to represent natual numbers:
 ; () - 0, (()) - 1, (()()) - 2 etc.
 ; sero? is to check if it is ().
 (define sero?

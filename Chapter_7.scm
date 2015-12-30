@@ -4,7 +4,7 @@
 
 ; The function checks if L contains x.
 ; x has to be an atom here.
-; Exactly the same function from Chapter 2, used by makeset function.
+; Exactly the same function from Chapter 2, used by set? and makeset function.
 (define member?
 	(lambda (x lat)
 		(cond
@@ -27,7 +27,7 @@
 	)
 )
 
-; The function makes a lat a set by removing repetitve elements using member.
+; The function turns a lat into a set by removing repetitve elements.
 (define makeset
 	(lambda (lat)
 		(cond
@@ -51,7 +51,19 @@
 	)
 )
 
-; A different implementation of makeset using multirember function.
+; A different implementation of makeset using multirember function
+; according to previous one.
+(define makeset
+	(lambda (lat)
+		(cond
+			((null? lat) '())
+			((member? (car lat) (cdr lat)) (cons (car lat) (makeset (multirember (car lat) (cdr lat)))))
+			(else (cons (car lat) (makeset (cdr lat))))
+		)
+	)
+)
+
+; A different implementation of makeset using multirember function from the textbook.
 (define makeset
 	(lambda (lat)
 		(cond
@@ -133,7 +145,7 @@
 	)
 )
 
-; The function returns the difference of two sets (set1 / set2)
+; The function returns the difference of two sets (set1 / set2).
 (define difference
 	(lambda (set1 set2)
 		(cond
@@ -167,13 +179,13 @@
 	(lambda (L)
 		(cond
 			; An S-expression.
-			((null? L) #f) ; If it is empty.
-			; An atom or a non-empty list.
 			((atom? L) #f) ; If it is an atom.
+			; A list.
+			((null? L) #f) ; If it is empty.
 			; A non-empty list with one or two or more elements.
 			((null? (cdr L)) #f) ; If it contains only one element.
 			; A non-empty list with two or more elements.
-			((null? (cdr (cdr L))) #t)
+			((null? (cdr (cdr L))) #t) ; ((null? (cddr L)) #t)
 			; If the third element is null (it contains exactly two elements).
 			(else #f) ; A non-empty list with more than two elements.
 		)
@@ -190,14 +202,14 @@
 ; second gets the second element from a list.
 (define second
 	(lambda (L)
-		(car (cdr L))
+		(car (cdr L)) ; (cadr L)
 	)
 )
 
 ; third gets the third element from a list.
 (define third
 	(lambda (L)
-		(car (cdr (cdr L)))
+		(car (cdr (cdr L))) ; (caddr L)
 	)
 )
 
@@ -205,10 +217,12 @@
 (define build
 	(lambda (s1 s2)
 		(cons s1 (cons s2 '())) ; Don't forget to cons '().
+		; (cons x1 (cons x2 '())) == (list x1 x2)
+		; where x1 and x2 are S-expressions.
 	)
 )
 
-; Return all the first ones in order of a list of non-empty lists or a null list.
+; Return all the first ones in order of a list of non-empty lists or return a null list.
 ; Exactly the same function from Chapter 3, used in fun?.
 (define firsts
 	(lambda (L)
@@ -216,12 +230,13 @@
 			((null? L) '())
 			; Since (car L) is non-empty, (car (car L)) cannot be empty too.
 			(else (cons (car (car L)) (firsts (cdr L))))
+			; (else (cons (caar L) (firsts (cdr L))))
 		)
 	)
 )
 
-; The term *relation* (rel) means a set of pairs, such as ((1 2) (1 3) (3 4)).
-; The term *function* (fun) means a set of pairs, where the fact that (firsts X_i)
+; The term "relation" (rel) means a set of pairs, such as ((1 2) (1 3) (3 4)).
+; The term "function" (fun) means a set of pairs, where the fact that (firsts X_i)
 ; is a set holds, for each element X_i in the set, such as ((1 2) (2 3) (3 3)).
 ; fun? is to check if a rel is a fun.
 (define fun?
@@ -258,8 +273,8 @@
 	)
 )
 
-; The function returns all the first ones in order of a list of non-empty lists
-; or a null list.
+; The function returns all the second ones in order of a list of lists with at least two elements
+; or returns a null list.
 (define seconds
 	(lambda (L)
 		(cond
@@ -272,7 +287,7 @@
 	)
 )
 
-; The term *full function* (fullfun) means a fun with all second items being a set.
+; The term "full function" (fullfun) means a fun with all second items being a set.
 ; fullfun? is to check if a rel is a full function.
 (define fullfun?
 	(lambda (fun)
@@ -284,5 +299,6 @@
 (define one-to-one?
 	(lambda (fun)
 		(fun? (revrel fun))
+		; For one-to-one function, it exists its inverse function.
 	)
 )
