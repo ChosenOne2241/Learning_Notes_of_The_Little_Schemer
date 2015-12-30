@@ -25,7 +25,7 @@
 	)
 )
 
-; Return all the first ones in order of a list of non-empty lists or return a null list.
+; Return all the first ones in order from a list of non-empty lists or return an empty list.
 (define firsts
 	(lambda (L)
 		(cond

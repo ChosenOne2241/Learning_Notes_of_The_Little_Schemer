@@ -222,7 +222,7 @@
 	)
 )
 
-; Return all the first ones in order of a list of non-empty lists or return a null list.
+; Return all the first ones in order from a list of non-empty lists or return an empty list.
 ; Exactly the same function from Chapter 3, used in fun?.
 (define firsts
 	(lambda (L)
@@ -273,16 +273,14 @@
 	)
 )
 
-; The function returns all the second ones in order of a list of lists with at least two elements
-; or returns a null list.
+; The function returns all the second ones in order from a list of lists with
+; at least two elements or returns an empty list.
 (define seconds
 	(lambda (L)
 		(cond
 			((null? L) '())
-			((null? (cdr (car L))) (seconds (cdr L)))
-			; Although (car (car L)) cannot be empty,
-			; it does not mean (cdr (car L)) has to return non-empty element.
 			(else (cons (car (cdr (car L))) (seconds (cdr L))))
+			; (else (cons (cadar L) (seconds (cdr L))))
 		)
 	)
 )
