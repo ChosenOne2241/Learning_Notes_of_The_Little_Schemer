@@ -53,8 +53,8 @@
 	)
 )
 
-; value returns the values of a regular arithmetic expression
-; with numbers and opeartors (+, * and ^).
+; value returns the value of a regular arithmetic expression with numbers
+; and opeartors (+, * and ^).
 (define value
 	(lambda (nexp)
 		(cond

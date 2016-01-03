@@ -278,7 +278,7 @@
 	)
 )
 
-; Go through a list and remove the first occurence of s.
+; Go through a list L and remove the first occurence of S.
 ; Simplified version of the function rember in Chapter 3.
 (define rember
 	(lambda (S L)

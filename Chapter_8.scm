@@ -21,8 +21,7 @@
 )
 
 ; eq?-c is a function that, when passed an argument a, returns the function
-; (lambda (x)
-; 	(eq? x a))
+; (lambda (x) (eq? x a))
 ; where a is just that argument.
 (define eq?-c
 	(lambda (a)
@@ -107,7 +106,7 @@
 ; Define insertR with insert-g.
 (define insertR (insert-g seqR))
 
-; Define insertL without using seqL.
+; Define insertL without using seqL explicitly.
 (define insertL
 	(insert-g
 		(lambda (new old l)
@@ -116,7 +115,7 @@
 	)
 )
 
-; Define insertR without using seqR.
+; Define insertR without using seqR explicitly.
 (define insertR
 	(insert-g
 		(lambda (new old l)
@@ -144,21 +143,21 @@
 (define rember
 	(lambda (a l)
 		((insert-g seqrem) #f a l)
-		; #f here is just a spacefiller.
+		; #f here is just a placeholder.
 	)
 )
 
-; Calculate x ^ y, where x cannot be 0 and y is a positive integer.
+; Calculate n ^ m, where n cannot be 0 and m has to be greater than or equal to 0.
 ; Exactly the same function from Chapter 6, used in value function.
 (define ^
-	(lambda (x y)
+	(lambda (n m)
 		(cond
-			((= y 0) 1)
-			(else (* x (^ x (- y 1))))
+			((zero? m) 1)
+			; ((= m 0) 1)
+			(else (* n (^ n (sub1 m))))
 		)
 	)
 )
-
 ; Help function 1 from Chapter 6.
 (define 1st-sub-exp
 	(lambda (aexp)
@@ -217,7 +216,7 @@
 ; Define multirember-eq? using multirember-f.
 (define multirember-eq? (multirember-f eq?))
 
-; It looks at every atom of the lat to see whether it is eq? to a.
+; The function looks at every atom of the lat to see whether it is eq? to a.
 ; Those atoms that are not are collected in one list ls1; the others for which
 ; the answer is true are collected in a second list ls2.
 ; Finally, it determines the value of (f ls1 ls2).
@@ -243,18 +242,60 @@
 	)
 )
 
-; It is a function that takes two arguments and asks whether the second
-; one is the empty list. It ignores its first argnment.
-; It is used to test multirember&co.
-(define a-friend
-	(lambda (x y)
-		(null? y)
+; Help function 1 used by rewritten version of multirember&co.
+(define cons_first
+	(lambda (fun ele) ; Currying.
+	; fun - function used to collect; ele - the element to be cons'ed.
+		(lambda (first second)
+			(fun (cons ele first) second)
+		)
 	)
 )
 
-; Both arguments new and old need to be atoms.
-; The function builds a lat with new inserted to the left of the all ocurrences of old.
-; Similar to its counterpart in Chapter 3 (multiinsertR).
+; Help function 2 used by rewritten version of multirember&co.
+(define cons_second
+	(lambda (fun ele)
+		(lambda (first second)
+			(fun first (cons ele second))
+		)
+	)
+)
+
+; Rewrite multirember&co by giving two anonymous functions actucal names
+; (cons_first and cons_second).
+(define multirember&co
+	(lambda (a lat col)
+		(cond
+			((null? lat) (col '() '()))
+			; Return a function with two arguments.
+			((eq? (car lat) a)
+				(multirember&co a (cdr lat) (cons_second col (car lat)))
+			)
+			(else
+				(multirember&co a (cdr lat) (cons_first col (car lat)))
+			)
+		)
+	)
+)
+
+; The function, written by myself, has the same effect of multirember&co with
+; `list` as argument fun and returns (ls1 ls2) as one argument.
+(define multirember&separate
+	(lambda (a lat)
+		(cond
+			((null? lat) '(() ()))
+			; Return only one argument; notice the difference from the original one.
+			((eq? (car lat) a)
+				(list (car (multirember&separate a (cdr lat))) (cons (car lat) (cadr (multirember&separate a (cdr lat)))))
+			)
+			(else
+				(cons (cons (car lat) (car (multirember&separate a (cdr lat)))) (cdr (multirember&separate a (cdr lat))))
+			)
+		)
+	)
+)
+
+; Exactly the same function from Chapter 3.
 (define multiinsertL
 	(lambda (new old lat)
 		(cond
@@ -265,7 +306,8 @@
 	)
 )
 
-; A general version of multiinsert fucntion using seq as an argument (seqL / seqR).
+; A general version of multiinsert fucntion using seq as an argument (seqL / seqR),
+; written by myself.
 (define multiinsert
 	(lambda (seq)
 		(lambda (new old lat)

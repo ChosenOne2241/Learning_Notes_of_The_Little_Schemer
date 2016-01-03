@@ -151,13 +151,14 @@
 	)
 )
 
-; Calculate n ^ m,
-; where n cannot be equal to 0 and m has to be bigger than or equal to 0.
-(define expt
+; Calculate n ^ m, which is the same as expt function in Scheme.
+; where n cannot be equal to 0 and m has to be greater than or equal to 0.
+(define ^
 	(lambda (n m)
 		(cond
 			((zero? m) 1)
-			(else (* n (expt n (sub1 m))))
+			; ((= m 0) 1)
+			(else (* n (^ n (sub1 m))))
 		)
 	)
 )

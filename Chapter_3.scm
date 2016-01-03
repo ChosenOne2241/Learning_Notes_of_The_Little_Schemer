@@ -13,18 +13,6 @@
 	)
 )
 
-; Go through a list and remove the all occurences of atom x.
-; x has to be an atom here; L is a lat.
-(define multirember
-	(lambda (x L)
-		(cond
-			((null? L) '())
-			((eq? x (car L)) (multirember x (cdr L)))
-			(#t (cons (car L) (multirember x (cdr L))))
-		)
-	)
-)
-
 ; Return all the first ones in order from a list of non-empty lists or return an empty list.
 (define firsts
 	(lambda (L)
@@ -46,18 +34,6 @@
 			((eq? old (car lat)) (cons old (cons new (cdr lat))))
 			; Connect the first atom (currently), the new one and the rest of lat together.
 			(#t (cons (car lat) (insertR new old (cdr lat))))
-		)
-	)
-)
-
-; Both arguments new and old need to be atoms.
-; The function builds a lat with new inserted to the right of the all ocurrences of old.
-(define multiinsertR
-	(lambda (new old lat)
-		(cond
-			((null? lat) '())
-			((eq? old (car lat)) (cons old (cons new (multiinsertR new old (cdr lat)))))
-			(#t (cons (car lat) (multiinsertR new old (cdr lat))))
 		)
 	)
 )
@@ -93,6 +69,42 @@
 			((null? lat) '())
 			((or (eq? o1 (car lat)) (eq? o2 (car lat))) (cons new (cdr lat)))
 			(#t (cons (car lat) (subst2 new o1 o2 (cdr lat))))
+		)
+	)
+)
+
+; Go through a list and remove the all occurences of atom x.
+; x has to be an atom here; L is a lat.
+(define multirember
+	(lambda (x L)
+		(cond
+			((null? L) '())
+			((eq? x (car L)) (multirember x (cdr L)))
+			(#t (cons (car L) (multirember x (cdr L))))
+		)
+	)
+)
+
+; Both arguments new and old need to be atoms.
+; The function builds a lat with new inserted to the right of the all ocurrences of old.
+(define multiinsertR
+	(lambda (new old lat)
+		(cond
+			((null? lat) '())
+			((eq? old (car lat)) (cons old (cons new (multiinsertR new old (cdr lat)))))
+			(#t (cons (car lat) (multiinsertR new old (cdr lat))))
+		)
+	)
+)
+
+; Both arguments new and old need to be atoms.
+; The function builds a lat with new inserted to the left of the all ocurrences of old.
+(define multiinsertL
+	(lambda (new old lat)
+		(cond
+			((null? lat) '())
+			((eq? old (car lat)) (cons new (cons old (multiinsertL new old (cdr lat)))))
+			(else (cons (car lat) (multiinsertL new old (cdr lat))))
 		)
 	)
 )
