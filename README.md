@@ -1,11 +1,5 @@
 # Learning Notes of The Little Schemer
 
-The project contains almost all programs from *The Little Schemer* written by myself; plus, I added some extra comments just for myself to understand. :)
+The project comprises nearly all code from [*The Little Schemer*](https://mitpress.mit.edu/books/little-schemer-fourth-edition, "The Little Schemer, fourth edition"); besides, I inserted extra comments for easier comprehension after modifying the original code subtly to be compatible with [Chez Scheme 9.5](https://www.scheme.com/index.html "(chez (chez scheme))") syntax.
 
-The introduction to this interesting textbook is [here](http://mitpress.mit.edu/books/little-schemer "The Little Schemer, fourth edition").
-
-And the Scheme interpreter I use is called [Petite Chez Scheme](http://www.scheme.com/petitechezscheme.html "Petite Chez Scheme").
-
-Free to use and enjoy it!
-
-'(Yongzhen R.)
+Feel free to use and enjoy it!
